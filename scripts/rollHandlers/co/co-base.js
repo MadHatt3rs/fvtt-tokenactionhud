@@ -29,7 +29,10 @@ export class RollHandlerBaseCo extends RollHandler {
         break;
       case "spell":
         this._handleSpell(macroType, event, actor, itemId);
-        break;        
+        break;
+      case "attack":
+        this._handleAttack(macroType,event, actor, itemId);
+        break;      
       case "item":
         if (this.isRenderItem()) this.doRenderItem(tokenId, itemId);
         else this._handleItem(macroType, event, actor, itemId);
@@ -60,9 +63,19 @@ export class RollHandlerBaseCo extends RollHandler {
     let item = actor.items.get(actionId);
     // Only Dommage
     if (this.isShift(event)) {
+      
       actor.rollWeapon(item, {dmgOnly: true})
     }
     else actor.rollWeapon(item);
+  }
+
+  _handleAttack(macroType, event, actor, actionId) {
+    let item = actor.data.data.weapons[actionId];
+    // Only Dommage
+    if (this.isShift(event)) {
+      actor.rollEncounterWeapon(item, {dmgOnly: true})
+    }
+    else actor.rollEncounterWeapon(item);
   }
 
   _handleSpell(macroType, event, actor, actionId) {

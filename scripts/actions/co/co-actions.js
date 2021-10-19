@@ -21,7 +21,7 @@ export class ActionHandlerCo extends ActionHandler {
     if (!actor) return result;
 
     let actorType = actor.data.type;
-    if (actorType != "character" && actorType != "npc") return result;
+    if (actorType != "character" && actorType != "npc" && actorType != "encounter") return result;
 
     result.actorId = actor.id;
 
@@ -101,6 +101,23 @@ export class ActionHandlerCo extends ActionHandler {
     );
     
     this._combineSubcategoryWithCategory(result, this.i18n("tokenactionhud.spells"), spellsCategory);
+
+    // Attack (Encounter case)
+    let attacksCategory = this.initializeEmptySubcategory();
+
+    let attacks = []
+    for(var i in  actor.data.data.weapons){
+      attacks.push(actor.data.data.weapons[i]);
+    }
+
+    attacksCategory.actions = attacks.map((c, index) => {
+      const attackId = index;
+      const name = c.name
+      const macroType = "attack";
+      let encodedValue = [macroType, tokenId, attackId].join(this.delimiter);
+      return { name: name, encodedValue: encodedValue, id: attackId };
+    });
+    this._combineSubcategoryWithCategory(result, this.i18n("tokenactionhud.co.attacks"), attacksCategory);
 
     return result;
   }
