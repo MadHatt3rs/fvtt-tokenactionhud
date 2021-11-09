@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.3.18] 2021-11-03
+
+### Changed
+
+- forbidden-lands - added system to TAH (WIP) - thanks Sozin and aMediocreDad!
+
+## [1.3.17] 2021-11-02
+
+### Changed
+
+- wfrp - sort subcategories alphabetically
+- ds4 - fix localisation files
+- rework - theoretically allow modules to create TAH Addins for systems
+- pf2e - localize skills
+
 ## [1.3.16] 2021-10-18
 
 ### Changed
