@@ -863,14 +863,14 @@ export class ActionHandlerPf2e extends ActionHandler {
       let attributes = this.initializeEmptySubcategory();
       let attributeActions = [];
 
-      let heroPoints = actor.data.data.attributes?.heroPoints;
+      let heroPoints = actor.data.data.resources?.heroPoints;
       if (heroPoints)
         attributeActions.push(
           this._getAttributeAction(
             tokenId,
             "heroPoint",
             this.i18n("tokenactionhud.heroPoints"),
-            heroPoints.rank,
+            heroPoints.value,
             heroPoints.max
           )
         );
@@ -890,6 +890,18 @@ export class ActionHandlerPf2e extends ActionHandler {
             dyingMax
           )
         );
+      }
+      
+      if (dyingPoints?.value >= 1) {
+        let recoveryCheckValue = ["recoveryCheck", tokenId, "recoveryCheck"].join(
+          this.delimiter
+        );
+        let recoveryCheckAction = {
+          id: "recoveryCheck",
+          encodedValue: recoveryCheckValue,
+          name: this.i18n("tokenactionhud.pf2e.recoveryCheck"),
+        };
+        attributeActions.push(recoveryCheckAction);
       }
 
       let woundedPoints = actor.data.data.attributes?.wounded;

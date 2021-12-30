@@ -1,5 +1,43 @@
 # Changelog
 
+## [1.3.26] 2021-11-22
+
+### Changed
+
+- pf2e - fix PC HUD
+
+## [1.3.25] 2021-11-22
+
+### Changed
+
+- TAH - fix Compendium Helper check for existing index - thanks In3luki
+
+## [1.3.24] 2021-11-22
+
+### Changed
+
+- pf2e - add recovery Checks
+
+## [1.3.23] 2021-11-21
+
+### Changed
+
+- pf2e - adjust heroPoint path
+
+## [1.3.22] 2021-11-20
+
+### Changed
+
+- pf2e - adjust heroPoint path
+
+## [1.3.21] 2021-11-19
+
+### Changed
+
+- cthack - use generic translations where possible - thanks QaW
+- lancer - add missing await - thanks Purring Insanity
+- pf1 - rework spellbook category - thanks dmrickey
+
 ## [1.3.18] 2021-11-03
 
 ### Changed
