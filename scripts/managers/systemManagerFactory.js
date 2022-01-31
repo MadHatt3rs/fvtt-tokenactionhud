@@ -6,7 +6,7 @@ import { Pf1SystemManager } from "./pf1.js";
 import { D35ESystemManager } from "./d35e.js";
 import { Pf2eSystemManager } from "./pf2e.js";
 import { SfrpgSystemManager } from "./sfrpg.js";
-import { Sw5eSystemManager } from "./sw5e.js";
+import { SW5eSystemManager } from "./sw5e.js";
 import { Wfrp4eSystemManager } from "./wfrp4e.js";
 import { LancerSystemManager } from "./lancer.js";
 import { SwadeSystemManager } from "./swade.js";
@@ -21,6 +21,7 @@ import { TagmarSystemManager } from "./tagmar.js";
 import { Ds4SystemManager } from "./ds4.js";
 import { CoSystemManager } from "./co.js";
 import { ForbiddenLandsSystemManager } from './forbiddenlands.js'
+import { DnD4eSystemManager } from './dnd4e.js'
 
 export class SystemManagerFactory {
   static create(system, appName) {
@@ -44,7 +45,7 @@ export class SystemManagerFactory {
       case "sfrpg":
         return new SfrpgSystemManager(appName);
       case "sw5e":
-        return new Sw5eSystemManager(appName);
+        return new SW5eSystemManager(appName);
       case "wfrp4e":
         return new Wfrp4eSystemManager(appName);
       case "lancer":
@@ -75,6 +76,8 @@ export class SystemManagerFactory {
         return new CoSystemManager(appName);
       case 'forbidden-lands':
         return new ForbiddenLandsSystemManager(appName);
+      case 'dnd4e':
+        return new DnD4eSystemManager(appName);
     }
   }
 }

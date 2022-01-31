@@ -5,7 +5,7 @@
   "authors": [
     {
       "name": "Drental",
-      "email": "foundry@crumblinggiant.com"
+      "email": "tah@crumblinggiant.com"
     },
     {
       "name": "^ and stick"
@@ -13,9 +13,9 @@
   ],
   "url": "https://github.com/MadHatt3rs/fvtt-tokenactionhud",
   "flags": {},
-  "version": "1.3.26",
-  "minimumCoreVersion": "0.8.0",
-  "compatibleCoreVersion": "0.8.9",
+  "version": "2.0.18",
+  "minimumCoreVersion": "9.236",
+  "compatibleCoreVersion": "9",
   "scripts": ["./lib/tagify/tagify.min.js", "./scripts/bundle.min.js"],
   "styles": ["./styles/token-action-hud.css", "/styles/lib/tagify/tagify.css"],
   "languages": [
@@ -60,6 +60,11 @@
       "path": "lang/cn.json"
     },
     {
+      "lang": "it",
+      "name": "italiano",
+      "path": "lang/it.json"
+    },
+    {
       "lang": "de",
       "name": "Deutsch",
       "path": "lang/de.json"
@@ -91,12 +96,13 @@
     "ds4",
     "coc",
     "cof",
-    "forbidden-lands"
+    "forbidden-lands",
+	"dnd4e"
   ],
   "dependencies": [],
   "socket": false,
   "manifest": "https://raw.githubusercontent.com/MadHatt3rs/fvtt-tokenactionhud/master/module.json",
-  "download": "https://github.com/MadHatt3rs/fvtt-tokenactionhud/releases/download/1.3.26/module.zip",
+  "download": "https://github.com/MadHatt3rs/fvtt-tokenactionhud/releases/download/2.0.18/module.zip",
   "protected": false,
   "coreTranslation": false,
   "library": false

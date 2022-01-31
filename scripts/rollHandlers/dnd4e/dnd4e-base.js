@@ -1,16 +1,21 @@
 import { RollHandler } from "../rollHandler.js";
 import * as settings from "../../settings.js";
 
-export class RollHandlerBaseSW5e extends RollHandler {
+export class RollHandlerBaseDnD4e extends RollHandler {
   constructor() {
     super();
+  }
+
+  emptyEvent = {
+    preventDefault : function() {
+    }
   }
 
   /** @override */
   async doHandleActionEvent(event, encodedValue) {
     let payload = encodedValue.split("|");
 
-    if (payload.length != 3) {
+    if (payload.length !== 3) {
       super.throwInvalidValueErr();
     }
 
@@ -36,17 +41,13 @@ export class RollHandlerBaseSW5e extends RollHandler {
       case "skill":
         this.rollSkillMacro(event, tokenId, actionId);
         break;
-      case "abilitySave":
-        this.rollAbilitySaveMacro(event, tokenId, actionId);
-        break;
-      case "abilityCheck":
-        this.rollAbilityCheckMacro(event, tokenId, actionId);
-        break;
-      case "item":
-      case "power":
-      case "feat":
+      case "feature":
         if (this.isRenderItem()) this.doRenderItem(tokenId, actionId);
         else this.rollItemMacro(event, tokenId, actionId);
+        break;
+      case "power":
+        if (this.isRenderItem()) this.doRenderItem(tokenId, actionId);
+        else this.rollPowerMacro(event, tokenId, actionId);
         break;
       case "utility":
         await this.performUtilityMacro(event, tokenId, actionId);
@@ -66,16 +67,6 @@ export class RollHandlerBaseSW5e extends RollHandler {
     actor.rollAbility(checkId, { event: event });
   }
 
-  rollAbilityCheckMacro(event, tokenId, checkId) {
-    const actor = super.getActor(tokenId);
-    actor.rollAbilityTest(checkId, { event: event });
-  }
-
-  rollAbilitySaveMacro(event, tokenId, checkId) {
-    const actor = super.getActor(tokenId);
-    actor.rollAbilitySave(checkId, { event: event });
-  }
-
   rollSkillMacro(event, tokenId, checkId) {
     const actor = super.getActor(tokenId);
     actor.rollSkill(checkId, { event: event });
@@ -85,20 +76,34 @@ export class RollHandlerBaseSW5e extends RollHandler {
     let actor = super.getActor(tokenId);
     let item = super.getItem(actor, itemId);
 
-    if (this.needsRecharge(item)) {
-      item.rollRecharge();
+    if (this.needsRecharge(actor, item)) {
+      const event = Object.assign({}, this.emptyEvent)
+      event.currentTarget = { closest : (str) => {return {dataset : { itemId : itemId}}} };
+      actor.sheet._onItemRecharge(event)
       return;
     }
 
-    if (item.data.type === "power") return actor.usePower(item);
-
-    return item.roll({ event });
+    return actor.usePower(item)
   }
 
-  needsRecharge(item) {
+  rollPowerMacro(event, tokenId, itemId) {
+    let actor = super.getActor(tokenId);
+    let item = super.getItem(actor, itemId);
+
+    if (this.needsRecharge(actor, item)) {
+      const event = Object.assign({}, this.emptyEvent)
+      event.currentTarget = { closest : (str) => {return {dataset : { itemId : itemId}}} };
+      actor.sheet._onItemRecharge(event)
+      return;
+    }
+
+    return actor.usePower(item)
+  }
+
+  needsRecharge(actor, item) {
     const itemData = this._getDocumentData(item);
     return (
-      itemData.recharge && !itemData.recharge.charged && itemData.recharge.value
+        itemData.useType === "recharge" && itemData.notAvailable
     );
   }
 
@@ -106,17 +111,8 @@ export class RollHandlerBaseSW5e extends RollHandler {
     let actor = super.getActor(tokenId);
     let token = super.getToken(tokenId);
 
+
     switch (actionId) {
-      case "shortRest":
-        actor.shortRest();
-        break;
-      case "longRest":
-        actor.longRest();
-        break;
-      case "inspiration":
-        let update = !actor.data.data.attributes.inspiration;
-        actor.update({ "data.attributes.inspiration": update });
-        break;
       case "toggleCombat":
         token.toggleCombat();
         Hooks.callAll("forceUpdateTokenActionHUD");
@@ -124,20 +120,14 @@ export class RollHandlerBaseSW5e extends RollHandler {
       case "toggleVisibility":
         token.toggleVisibility();
         break;
-      case "deathSave":
-        actor.rollDeathSave({ event });
+      case "saveDialog":
+        actor.sheet._onSavingThrow(this.emptyEvent)
         break;
-      case "rechargeRepair":
-        actor.rechargeRepair();
+      case "save":
+        game.dnd4eBeta.quickSave(actor)
         break;
-      case "refittingRepair":
-        actor.refittingRepair();
-        break;
-      case "regenRepair":
-        actor.regenRepair();
-        break;
-      case "destructionSave":
-        actor.rollDestructionSave({ event });
+      case "healDialog":
+        actor.sheet._onHealMenuDialog(this.emptyEvent)
         break;
       case "initiative":
         await this.performInitiativeMacro(tokenId);
@@ -190,7 +180,7 @@ export class RollHandlerBaseSW5e extends RollHandler {
       if (!condition) return;
 
       isRightClick
-        ? await token.toggleOverlay(condition)
+        ? await token.toggleEffect(condition, {overlay : true})
         : await token.toggleEffect(condition);
     }
 

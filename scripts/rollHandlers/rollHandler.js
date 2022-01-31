@@ -83,15 +83,15 @@ export class RollHandler {
   }
 
   isAlt(event) {
-    return event?.altKey;
+    return game.keyboard.isModifierActive(KeyboardManager.MODIFIER_KEYS.ALT);
   }
 
   isCtrl(event) {
-    return keyboard?.isCtrl(event);
+    return game.keyboard.isModifierActive(KeyboardManager.MODIFIER_KEYS.CONTROL);
   }
 
   isShift(event) {
-    return event?.shiftKey;
+    return game.keyboard.isModifierActive(KeyboardManager.MODIFIER_KEYS.SHIFT);
   }
 
   /** @private */

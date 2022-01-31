@@ -1,5 +1,137 @@
 # Changelog
 
+## [2.0.18] 2022-01-30
+
+### Changed
+
+- Od6s - Move vehicle actions to a separate category and adds resistance/shield rolls - thanks madseumas
+
+## [2.0.17] 2022-01-29
+
+### Changed
+
+- pf2e - stop consuming ammunition twice
+
+## [2.0.16] 2022-01-27
+
+### Changed
+
+- SWADE - Better handling of better rolls2 for SWADE rolls - thanks javierriveracastro
+
+## [2.0.15] 2022-01-22
+
+### Changed
+
+- pf2e - actually fix npc saving throws part 3
+
+## [2.0.14] 2022-01-21
+
+### Changed
+
+- sw5e - fixed action HUD for newer charaacters - thanks supervj
+
+## [2.0.13] 2022-01-18
+
+### Changed
+
+- dnd4e - some minor bugfixes - thanks draconas
+
+## [2.0.12] 2022-01-13
+
+### Changed
+
+- sw5e - major update and overhaul - thanks supervj
+- localisation - updated french localisation - thanks Qaw
+
+## [2.0.11] 2022-01-10
+
+### Changed
+
+- pf2e - actually fix npc saving throws part 2
+
+## [2.0.10] 2022-01-07
+
+### Changed
+
+- cof - Handle capacities actions - thanks Qaw
+- cthack - remove random console.log - thanks Qaw
+
+## [2.0.9] 2022-01-02
+
+### Changed
+
+- Token Action HUD - italian localisation - thanks smoothingplane
+- DnD4e - added a new system! - thank you draconas!!
+
+## [2.0.8] 2022-01-02
+
+### Changed
+
+- pf2e - actually fix npc saving throws
+
+## [2.0.7] 2021-12-29
+
+### Changed
+
+- pf2e - fix npc saving throws
+- swade - preemplively adjust for a possible future change to power data structure
+
+## [2.0.6] 2021-12-26
+
+### Changed
+
+- pf2e - fix save rolls
+
+## [2.0.5] 2021-12-24
+
+### Changed
+
+- Token Action HUD - fix deprecation messages about pack.metadata.entity
+
+## [2.0.4] 2021-12-22
+
+### Changed
+
+- SWADE - only throw one Benny
+
+## [2.0.3] 2021-12-22
+
+### Changed
+
+- Token Action HUD - restored macro section functionality
+
+## [2.0.2] 2021-12-17
+
+### Changed
+
+- Token Action HUD - adress breaking change in Keyboard API
+
+## [2.0.1] 2021-12-14
+
+### Changed
+
+- Token Action HUD - first steps to V9 compatibility
+- Od6s - add vehicle actions - thanks madseumas
+
+## [1.3.29] 2021-11-28
+
+### Changed
+
+- pf2e - restore HUD NPC Strikes
+
+## [1.3.28] 2021-11-27
+
+### Changed
+
+- swade - show special abilities in Edges/hindrances Tab
+- pf2e - remove ammo information from combination weapons' melee strike
+
+## [1.3.27] 2021-11-27
+
+### Changed
+
+- pf2e - add support for combination weapons
+
 ## [1.3.26] 2021-11-22
 
 ### Changed

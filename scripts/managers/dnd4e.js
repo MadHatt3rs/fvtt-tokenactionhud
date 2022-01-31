@@ -1,9 +1,9 @@
 import { SystemManager } from "./manager.js";
-import { ActionHandlerCthack as ActionHandler } from "../actions/cthack/cthack-actions.js";
-import { RollHandlerBaseCthack as Core } from "../rollHandlers/cthack/cthack-base.js";
-import * as settings from "../settings/cthack-settings.js";
+import {ActionHandlerDnD4e as ActionHandler} from "../actions/dnd4e/dnd4e-actions.js";
+import {RollHandlerBaseDnD4e as Core} from "../rollHandlers/dnd4e/dnd4e-base.js";
+import * as settings from "../settings/dnd4e-settings.js";
 
-export class CthackSystemManager extends SystemManager {
+export class DnD4eSystemManager extends SystemManager {
   constructor(appName) {
     super(appName);
   }
@@ -16,7 +16,8 @@ export class CthackSystemManager extends SystemManager {
 
   /** @override */
   getAvailableRollHandlers() {
-    let choices = { core: "Core Cthack" };
+    let choices = { core: "Core dnd4e" };
+
     return choices;
   }
 

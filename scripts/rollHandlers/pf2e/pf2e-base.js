@@ -7,6 +7,14 @@ export class RollHandlerBasePf2e extends RollHandler {
   constructor() {
     super();
   }
+  
+  eventToRollParams(event) {
+    const skipDefault = !game.user.settings.showRollDialogs;
+    return {
+        secret: !!(event.ctrlKey || event.metaKey),
+        skipDialog: event.shiftKey ? !skipDefault : skipDefault,
+    };
+  }
 
   async doHandleActionEvent(event, encodedValue) {
     let payload = encodedValue.split("|");
@@ -18,16 +26,10 @@ export class RollHandlerBasePf2e extends RollHandler {
     let macroType = payload[0];
     let tokenId = payload[1];
     let actionId = payload[2];
-    console.log(payload);
+
     let renderable = ["item", "feat", "action", "lore", "ammo"];
     if (renderable.includes(macroType) && this.isRenderItem())
       return this.doRenderItem(tokenId, actionId);
-
-    let currentRollMode;
-    if (this._isBlindRollClick(event)) {
-      currentRollMode = game.settings.get("core", "rollMode");
-      await this._updateRollMode(this.BLIND_ROLL_MODE);
-    }
 
     try {
       const knownCharacters = ["character", "familiar", "npc"];
@@ -44,12 +46,6 @@ export class RollHandlerBasePf2e extends RollHandler {
       }
     } catch (e) {
       throw e;
-    } finally {
-      if (this._isBlindRollClick(event)) {
-        if (currentRollMode) {
-          await this._updateRollMode(currentRollMode);
-        }
-      }
     }
   }
 
@@ -117,14 +113,6 @@ export class RollHandlerBasePf2e extends RollHandler {
         this._rollStrikeChar(event, tokenId, actor, actionId);
         break;
     }
-  }
-
-  /** @private */
-  _isBlindRollClick(event) {
-    return (
-      this.isCtrl(event) &&
-      !(this.isRightClick(event) || this.isAlt(event) || this.isShift(event))
-    );
   }
 
   /** @private */
@@ -220,12 +208,12 @@ export class RollHandlerBasePf2e extends RollHandler {
 
   /** @private */
   _rollSaveChar(event, actor, actionId) {
-    let save = actor.data.data.saves[actionId];
+    let save = actor.saves[actionId];
     if (!save) {
       actor.rollSave(event, actionId);
     } else {
-      const options = actor.getRollOptions(["all", "saving-throw", save]);
-      save.roll({ event, options });
+      const rollParams = this.eventToRollParams(event);
+      save.check.roll(rollParams);
     }
   }
 
@@ -275,7 +263,8 @@ export class RollHandlerBasePf2e extends RollHandler {
 
   /** @private */
   _rollSaveNpc(event, actor, actionId) {
-    actor.data.data.saves[actionId].roll({ event });
+    const rollParams = this.eventToRollParams(event);
+    actor.saves[actionId].check.roll(rollParams);
   }
 
   async _updateRollMode(rollMode) {
@@ -288,22 +277,22 @@ export class RollHandlerBasePf2e extends RollHandler {
 
     let strikeName = actionParts[0];
     let strikeType = actionParts[1];
-
-    if (this.isRenderItem()) {
-      let item = actor.items.find(
-        (i) =>
-          strikeName
-            .toUpperCase()
-            .localeCompare(i.name.toUpperCase(), undefined, {
-              sensitivity: "base",
-            }) === 0
-      );
-      if (item) return this.doRenderItem(tokenId, item.data.id);
-    }
+    let strikeUsage = actionParts[2];
 
     let strike = actor.data.data.actions
       .filter((a) => a.type === "strike")
       .find((s) => s.name === strikeName);
+
+    if (this.isRenderItem()) {
+      let item = actor.data.data.actions
+        .filter((a) => a.type === "strike")
+        .find((s) => s.name === strikeName).origin;
+      if (item) return this.doRenderItem(tokenId, item.data.id);
+    }
+
+    if (strikeUsage !== "") {
+      strike = strike[strikeUsage];
+    }
 
     let options;
     switch (strikeType) {
@@ -317,26 +306,12 @@ export class RollHandlerBasePf2e extends RollHandler {
         break;
       default:
         options = actor.getRollOptions(["all", "attack-roll"]);
-        strike.variants[strikeType]?.roll({ event, options });
-        this._consumeAmmo(actor, strike);
+        strike.variants[strikeType]?.roll({
+          event,
+          options,
+        });
         break;
     }
-  }
-
-  /** @private */
-  _consumeAmmo(actor, strike) {
-    if (!strike.selectedAmmoId) return;
-
-    const ammo = actor.items.get(strike.selectedAmmoId);
-
-    if (ammo.quantity < 1) {
-      ui.notifications.error(
-        game.i18n.localize("PF2E.ErrorMessage.NotEnoughAmmo")
-      );
-      return;
-    }
-
-    ammo.consume();
   }
 
   /** @private */
